@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SweetMedical.Api/SweetMedical.Api.csproj" />
+    <Project Path="src/SweetMedical.Application/SweetMedical.Application.csproj" />
+    <Project Path="src/SweetMedical.Contracts/SweetMedical.Contracts.csproj" />
+    <Project Path="src/SweetMedical.Domain/SweetMedical.Domain.csproj" />
+    <Project Path="src/SweetMedical.Infrastructure/SweetMedical.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/SweetMedical.UnitTests/SweetMedical.UnitTests.csproj" />
+  </Folder>
+</Solution>
