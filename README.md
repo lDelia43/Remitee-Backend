@@ -122,4 +122,7 @@ dotnet test tests/SweetMedical.Tests/SweetMedical.Tests.csproj --filter "FullyQu
 
 ## Next steps / Future improvements
 
-- Add authentication (e.g. JWT Bearer).
+- **Global appointments endpoint**: add `GET /appointments` without requiring `doctorId`, enabling server-side pagination across all doctors. Currently the frontend fetches per doctor and paginates client-side.
+- **Appointment rescheduling**: add a `PATCH /appointments/{id}/reschedule` endpoint to change the date/time of an active appointment instead of only cancelling it.
+- **Authentication**: protect endpoints with JWT Bearer tokens.
+- Add filtering by status on `GET /appointments` (e.g. only `Active`).
