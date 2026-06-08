@@ -1,5 +1,9 @@
-<img width="500" height="300" alt="remitee_banner" src="https://github.com/user-attachments/assets/10f4a173-47f6-4742-97b7-3d45e6a360cb" />
-<img width="1902" height="799" alt="Screenshot 2026-06-08 082742" src="https://github.com/user-attachments/assets/02a8c1b9-a93e-4a95-b981-357a5cb1bda7" />
+<p align="center">
+  <img width="500" height="300" alt="remitee_banner" src="https://github.com/user-attachments/assets/10f4a173-47f6-4742-97b7-3d45e6a360cb" />
+</p>
+<p align="center">
+  <img width="1902" height="799" alt="Screenshot 2026-06-08 082742" src="https://github.com/user-attachments/assets/02a8c1b9-a93e-4a95-b981-357a5cb1bda7" />
+</p>
 
 # SweetMedical
 
