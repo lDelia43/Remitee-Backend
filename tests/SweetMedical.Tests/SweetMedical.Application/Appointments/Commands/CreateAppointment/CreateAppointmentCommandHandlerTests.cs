@@ -51,6 +51,26 @@ public class CreateAppointmentCommandHandlerTests
     }
 
     [Fact]
+    public async Task Handle_Should_ReturnConflict_WhenDoctorHasActiveAppointmentWithinOneHour()
+    {
+        var doctorId = Guid.NewGuid();
+        var existingAt = DateTime.UtcNow.AddDays(1).Date.AddHours(10);
+        var existing = new Appointment(Guid.NewGuid(), doctorId, "Existing Patient", existingAt);
+
+        _senderMock
+            .Setup(s => s.Send(It.Is<GetActiveAppointmentsByDoctorQuery>(q => q.DoctorId == doctorId), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GetActiveAppointmentsByDoctorResult([existing]));
+
+        // 30 minutos después — dentro de la misma hora
+        var result = await _handler.Handle(
+            new CreateAppointmentCommand(doctorId, "John Doe", existingAt.AddMinutes(30)), CancellationToken.None);
+
+        Assert.True(result.IsError);
+        Assert.Equal(ErrorType.Conflict, result.FirstError.Type);
+        _repositoryMock.Verify(r => r.Add(It.IsAny<Appointment>()), Times.Never);
+    }
+
+    [Fact]
     public async Task Handle_Should_CreateAndPersistAppointment_WhenRequestIsValid()
     {
         var doctorId = Guid.NewGuid();

@@ -29,10 +29,11 @@ public class CreateAppointmentCommandHandler : IRequestHandler<CreateAppointment
         if (activeAppointments.IsError)
             return activeAppointments.Errors;
 
-        var hasConflict = activeAppointments.Value.Appointments.Any(a => a.ScheduledAt == request.ScheduledAt);
+        var hasConflict = activeAppointments.Value.Appointments.Any(a =>
+            Math.Abs((a.ScheduledAt - request.ScheduledAt).TotalHours) < 1);
 
         if (hasConflict)
-            return Error.Conflict("Appointment.Conflict", "The doctor already has an active appointment at that time.");
+            return Error.Conflict("Appointment.Conflict", "The doctor already has an active appointment within the same hour.");
 
         var appointment = new Appointment(
             Guid.NewGuid(),
