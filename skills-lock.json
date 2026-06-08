@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "skills": {
+    "aspnet-core": {
+      "source": "openai/skills",
+      "sourceType": "autoskills-registry",
+      "computedHash": "72fda9e92872cc972eb09648c84258c0cb2143874928c80b087ceddbf8171cb5"
+    },
+    "containerize-aspnetcore": {
+      "source": "github/awesome-copilot",
+      "sourceType": "autoskills-registry",
+      "computedHash": "6d065b998b00174b1600c51496e67d4917ba8b853d9965d1c2b0c0e05767d459"
+    },
+    "csharp-async": {
+      "source": "github/awesome-copilot",
+      "sourceType": "autoskills-registry",
+      "computedHash": "213d4b0921836fdf1ea3d218bc3625f48d149463f9bc765aac0eb343f31cfe37"
+    },
+    "csharp-docs": {
+      "source": "github/awesome-copilot",
+      "sourceType": "autoskills-registry",
+      "computedHash": "03ba5f2f605625202803d1cc79353e10b4f3ff720b93992aeecc8d88a1e44720"
+    },
+    "csharp-xunit": {
+      "source": "github/awesome-copilot",
+      "sourceType": "autoskills-registry",
+      "computedHash": "808c2d86afd16bccaba5f6d499361eb1da4d3e687a3305aa376ad4d40382e27d"
+    },
+    "dotnet-best-practices": {
+      "source": "github/awesome-copilot",
+      "sourceType": "autoskills-registry",
+      "computedHash": "98bd60f0529ffbb6b6319e61e952ce11ae9deb99106212d1070007bc8ae6708f"
+    },
+    "dotnet-design-pattern-review": {
+      "source": "github/awesome-copilot",
+      "sourceType": "autoskills-registry",
+      "computedHash": "60e201c6f3bd2832ed3834a8bb75143b2e6647e6026c5cbdad62f7706700c496"
+    },
+  }
+}

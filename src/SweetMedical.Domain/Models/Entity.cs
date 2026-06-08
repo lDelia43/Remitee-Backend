@@ -2,7 +2,7 @@ namespace SweetMedical.Domain.Models;
 
 public abstract class Entity<TId>: IEquatable<Entity<TId>> where TId: notnull
 {
-    public TId? Id { get; set; }
+    public TId Id { get; protected set; } = default!;
 
     protected Entity(TId id)
     {
@@ -33,6 +33,6 @@ public abstract class Entity<TId>: IEquatable<Entity<TId>> where TId: notnull
     
     public override int GetHashCode()
     {
-        return Id.GetHashCode();
+        return Id?.GetHashCode() ?? 0;
     }
 }

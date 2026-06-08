@@ -7,6 +7,6 @@
     <Project Path="src/SweetMedical.Infrastructure/SweetMedical.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/SweetMedical.UnitTests/SweetMedical.UnitTests.csproj" />
+    <Project Path="tests/SweetMedical.Tests/SweetMedical.Tests.csproj" />
   </Folder>
 </Solution>

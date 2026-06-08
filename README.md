@@ -1,3 +1,4 @@
+
 # SweetMedical
 
 Backend for the **Sweet Medical** technical challenge (Remitee): a REST API to manage medical appointments.
@@ -22,21 +23,8 @@ SweetMedical.Domain         ──►  (no dependencies)                      (e
 | `src/SweetMedical.Application` | Use cases, abstractions (ports), validation and orchestration. |
 | `src/SweetMedical.Contracts` | Public DTOs (request/response) exposed by the API over HTTP. No dependencies. |
 | `src/SweetMedical.Infrastructure` | Persistence and external-service implementations (adapters). |
-| `src/SweetMedical.Api` | REST API (controllers), configuration and dependency composition. |
-| `tests/SweetMedical.UnitTests` | Unit tests. |
-
-### Contracts vs. Application models
-
-`Contracts` defines the **stable HTTP contract** consumed by the client (React / React Native),
-decoupled from both the domain entities and the internal commands/queries of `Application`.
-
-- The domain is **never** exposed directly through the API.
-- `Application` does **not** reference `Contracts`: it has its own use-case models.
-- The `Api` maps `request (Contracts) → command/query (Application)` and
-  `result (Application) → response (Contracts)`.
-
-Each layer exposes an extension method (`AddApplication`, `AddInfrastructure`) that acts as a
-*composition root* and is invoked from `Program.cs`.
+| `src/SweetMedical.Api` | REST API (controllers, error handling), configuration and dependency composition. |
+| `tests/SweetMedical.Tests` | Unit tests. |
 
 ## Requirements
 
@@ -44,16 +32,33 @@ Each layer exposes an extension method (`AddApplication`, `AddInfrastructure`) t
 
 ## Running the backend
 
-From the repository root:
+### Option A — Docker Compose (recommended)
+
+Spins up the API together with a SQL Server instance. From the repository root:
 
 ```bash
-# Restore dependencies
-dotnet restore
+docker compose up --build
+```
 
-# Build
-dotnet build
+- API: `http://localhost:8080`
+- SQL Server: `localhost,1433` (user `sa`, database `SweetMedical`)
 
-# Run the API
+The API container applies EF Core migrations and seeds the doctors automatically on
+startup, so the database is ready to use. To stop and remove everything (including the
+database volume):
+
+```bash
+docker compose down -v
+```
+
+### Option B — Local (`dotnet run`)
+
+Requires a reachable SQL Server matching the connection string in
+`src/SweetMedical.Api/appsettings.json` (defaults to `localhost,1433`). The easiest way is to
+start only the database with Compose and run the API locally:
+
+```bash
+docker compose up -d db
 dotnet run --project src/SweetMedical.Api
 ```
 
@@ -62,16 +67,19 @@ By default the API is available at the URLs defined in
 
 In the `Development` environment the following are available:
 
-- **Swagger UI**: `/swagger`
-- **OpenAPI document**: `/openapi/v1.json`
+- **Swagger UI**: `/api/docs`
+- **OpenAPI document (JSON)**: `/swagger/v1/swagger.json`
 
-The OpenAPI document is generated with the native .NET support (`Microsoft.AspNetCore.OpenApi`)
-and the UI is rendered with `Swashbuckle.AspNetCore.SwaggerUI` pointing to that document.
+Both are provided by `Swashbuckle.AspNetCore`.
 
 ## Tests
 
 ```bash
-dotnet test
+# Run all tests
+dotnet test tests/SweetMedical.Tests/SweetMedical.Tests.csproj
+
+# Run a single test class
+dotnet test tests/SweetMedical.Tests/SweetMedical.Tests.csproj --filter "FullyQualifiedName~CreateAppointmentCommandHandlerTests"
 ```
 
 ## Technical decisions
@@ -79,30 +87,34 @@ dotnet test
 - **Clean Architecture / DDD**: layered separation to isolate business rules from infrastructure
   details, improving testability and extensibility.
 - **`.slnx` solution format**: the new XML-based solution format supported by .NET 10.
-- **OpenAPI** integrated via `Microsoft.AspNetCore.OpenApi`, with **Swagger UI**
-  (`Swashbuckle.AspNetCore.SwaggerUI`) exposed only in the `Development` environment.
+- **Swagger UI + OpenAPI**: documentación y esquema JSON expuestos via `Swashbuckle.AspNetCore` en el entorno `Development`.
+- **ErrorOr**: handlers return `ErrorOr<T>` instead of throwing. Controllers map errors to a `DomainException` which is caught by `GlobalExceptionHandler : IExceptionHandler`, translating it to the appropriate `ProblemDetails` response.
+- **MediatR + FluentValidation pipeline**: a `ValidateBehavior<TRequest, TResponse>` runs automatically before every handler that has a registered validator.
+- **Moq**: unit tests mock repositories via `Mock<IRepository>` instead of hand-written fakes.
 
 ## AI usage
 
 **Used AI for:**
 
 - Scaffolding the Clean Architecture (DDD) solution in .NET 10: `Domain`, `Application`,
-  `Contracts`, `Infrastructure`, `Api` and `UnitTests` projects, plus their project references.
+  `Contracts`, `Infrastructure`, `Api` and `Tests` projects, plus their project references.
 - Base DDD building blocks (`Entity<TId>`, `AggregateRoot<TId>`) and the per-layer
   *composition root* extension methods (`AddApplication`, `AddInfrastructure`).
 - Wiring OpenAPI + Swagger UI and writing this README.
+- `GlobalExceptionHandler`, `DomainException`, and the `ValidateBehavior` pipeline.
+- Unit test structure and Moq-based tests.
 
-**Manually reviewed / corrected:**
+**Built manually:**
 
-- Simplified `Program.cs` (service/pipeline grouping, removed the sample endpoints).
-- Reviewed and adjusted the README architecture section.
-- Domain modeling and business rules are written manually.
+- Domain modeling: `Appointment` and `Doctor` entities with their business rules and invariants.
+- All use cases: commands, queries, handlers and result types (`CreateAppointment`, `CancelAppointment`, `GetAppointments`, `GetDoctors`).
+- Repository implementations (`DoctorRepository`, `AppointmentRepository`) and EF Core configurations.
+- Controllers (`DoctorController`, `AppointmentController`) with request mapping and response handling.
+- Contracts: all request/response DTOs and AutoMapper profiles.
+- Docker Compose setup with SQL Server and API container.
+- Error handling strategy: `ErrorOr` → `DomainException` → `GlobalExceptionHandler`.
 
 ## Next steps / Future improvements
 
-- Model the appointment domain (entities such as `Doctor`, `Appointment`, etc.) in `SweetMedical.Domain`.
-- Implement the use cases in `SweetMedical.Application`.
-- Define the request/response DTOs in `SweetMedical.Contracts` (e.g. by feature: `Appointments/`, `Doctors/`).
-- Define persistence in `SweetMedical.Infrastructure` (EF Core or another provider).
-- Expose the REST endpoints (list doctors, list appointments, create appointment, cancel appointment).
-- Increase test coverage.
+- Add pagination to list endpoints (`GET /doctors`, `GET /appointments`) — kept simple for this version since the dataset is small, but the architecture supports adding it without breaking changes.
+- Add authentication (e.g. JWT Bearer).
