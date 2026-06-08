@@ -122,5 +122,4 @@ dotnet test tests/SweetMedical.Tests/SweetMedical.Tests.csproj --filter "FullyQu
 
 ## Next steps / Future improvements
 
-- Add pagination to list endpoints (`GET /doctors`, `GET /appointments`) — kept simple for this version since the dataset is small, but the architecture supports adding it without breaking changes.
 - Add authentication (e.g. JWT Bearer).
