@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using SweetMedical.Domain.Appointment;
-using SweetMedical.Domain.Doctor;
+using SweetMedical.Domain.AggregateModels.AggregateDoctor;
+using SweetMedical.Domain.AggregateModels.AppointmentAggregate;
 
 namespace SweetMedical.Infrastructure.Persistence;
 

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SweetMedical.Application.Common.Interfaces.Persistence;
 using SweetMedical.Infrastructure.Persistence;
+using SweetMedical.Infrastructure.Persistence.Queries;
 using SweetMedical.Infrastructure.Persistence.Repositories;
 
 namespace SweetMedical.Infrastructure;
@@ -26,6 +27,9 @@ public static class DependencyInjection
 
         services.AddScoped<IDoctorRepository, DoctorRepository>();
         services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+
+        services.AddScoped<IDoctorQueries, DoctorQueries>();
+        services.AddScoped<IAppointmentQueries, AppointmentQueries>();
 
         return services;
     }

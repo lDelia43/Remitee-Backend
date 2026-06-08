@@ -1,5 +1,4 @@
-﻿using SweetMedical.Domain.Appointment;
-using SweetMedical.Domain.Doctor;
+﻿using SweetMedical.Domain.AggregateModels.AppointmentAggregate;
 
 namespace SweetMedical.Application.Appointments.Common.GetAppointments;
 

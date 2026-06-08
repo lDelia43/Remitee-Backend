@@ -1,11 +1,10 @@
-using SweetMedical.Domain.Appointment;
-using SweetMedical.Domain.Appointment.Enums;
+using SweetMedical.Domain.AggregateModels.AppointmentAggregate.Enums;
 
 namespace SweetMedical.Tests.SweetMedical.Domain.Appointment;
 
 public class AppointmentTests
 {
-    private static global::SweetMedical.Domain.Appointment.Appointment CreateAppointment(DateTime scheduledAt) =>
+    private static global::SweetMedical.Domain.AggregateModels.AppointmentAggregate.Appointment CreateAppointment(DateTime scheduledAt) =>
         new(Guid.NewGuid(), Guid.NewGuid(), "John Doe", scheduledAt);
 
     [Fact]

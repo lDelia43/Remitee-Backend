@@ -1,7 +1,7 @@
-using SweetMedical.Domain.Appointment.Enums;
+using SweetMedical.Domain.AggregateModels.AppointmentAggregate.Enums;
 using SweetMedical.Domain.Models;
 
-namespace SweetMedical.Domain.Appointment;
+namespace SweetMedical.Domain.AggregateModels.AppointmentAggregate;
 
 public sealed class Appointment : AggregateRoot<Guid>
 {

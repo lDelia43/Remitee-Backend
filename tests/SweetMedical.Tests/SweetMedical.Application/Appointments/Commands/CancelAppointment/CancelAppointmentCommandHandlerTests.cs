@@ -2,8 +2,8 @@ using ErrorOr;
 using Moq;
 using SweetMedical.Application.Appointments.Commands.CancelAppointment;
 using SweetMedical.Application.Common.Interfaces.Persistence;
-using SweetMedical.Domain.Appointment;
-using SweetMedical.Domain.Appointment.Enums;
+using SweetMedical.Domain.AggregateModels.AppointmentAggregate;
+using SweetMedical.Domain.AggregateModels.AppointmentAggregate.Enums;
 
 namespace SweetMedical.Tests.SweetMedical.Application.Appointments.Commands.CancelAppointment;
 

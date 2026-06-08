@@ -9,7 +9,7 @@
 
 Backend for the **Sweet Medical** technical challenge (Remitee): a REST API to manage medical appointments.
 
-Built with **.NET 10** following **Clean Architecture (DDD)**.
+Built with **.NET 10** following **DDD**.
 
 ## Architecture
 
@@ -126,3 +126,4 @@ dotnet test tests/SweetMedical.Tests/SweetMedical.Tests.csproj --filter "FullyQu
 - **Appointment rescheduling**: add a `PATCH /appointments/{id}/reschedule` endpoint to change the date/time of an active appointment instead of only cancelling it.
 - **Authentication**: protect endpoints with JWT Bearer tokens.
 - Add filtering by status on `GET /appointments` (e.g. only `Active`).
+- Add UnitOfWork

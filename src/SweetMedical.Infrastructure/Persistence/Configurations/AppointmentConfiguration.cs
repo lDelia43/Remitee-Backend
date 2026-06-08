@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SweetMedical.Domain.Appointment;
-using SweetMedical.Domain.Appointment.Enums;
-using SweetMedical.Domain.Doctor;
+using SweetMedical.Domain.AggregateModels.AggregateDoctor;
+using SweetMedical.Domain.AggregateModels.AppointmentAggregate;
+using SweetMedical.Domain.AggregateModels.AppointmentAggregate.Enums;
 
 namespace SweetMedical.Infrastructure.Persistence.Configurations;
 

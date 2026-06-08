@@ -1,7 +1,7 @@
 using AutoMapper;
 using SweetMedical.Application.Doctors.Common.GetDoctors;
 using SweetMedical.Contracts.Doctors;
-using SweetMedical.Domain.Doctor;
+using SweetMedical.Domain.AggregateModels.AggregateDoctor;
 
 namespace SweetMedical.Api.Mappings;
 

@@ -1,4 +1,4 @@
-﻿using ErrorOr;
+using ErrorOr;
 using MediatR;
 using SweetMedical.Application.Common.Interfaces.Persistence;
 using SweetMedical.Application.Doctors.Common.GetDoctors;
@@ -7,17 +7,16 @@ namespace SweetMedical.Application.Doctors.Queries.GetDoctors;
 
 public class GetDoctorsQueryHandler : IRequestHandler<GetDoctorsQuery, ErrorOr<GetDoctorResult>>
 {
-    
-    private readonly IDoctorRepository _doctorRepository;
+    private readonly IDoctorQueries _doctorQueries;
 
-    public GetDoctorsQueryHandler(IDoctorRepository doctorRepository)
+    public GetDoctorsQueryHandler(IDoctorQueries doctorQueries)
     {
-        _doctorRepository = doctorRepository;
+        _doctorQueries = doctorQueries;
     }
 
     public async Task<ErrorOr<GetDoctorResult>> Handle(GetDoctorsQuery request, CancellationToken cancellationToken)
     {
-        var doctors = await _doctorRepository.GetDoctors();
+        var doctors = await _doctorQueries.GetAll();
         return new GetDoctorResult(doctors);
     }
 }

@@ -1,4 +1,4 @@
-﻿using SweetMedical.Domain.Doctor;
+﻿using SweetMedical.Domain.AggregateModels.AggregateDoctor;
 
 namespace SweetMedical.Application.Doctors.Common.GetDoctors;
 

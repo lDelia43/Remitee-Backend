@@ -1,19 +1,23 @@
 using ErrorOr;
+using MediatR;
 using Moq;
 using SweetMedical.Application.Appointments.Commands.CreateAppointment;
+using SweetMedical.Application.Appointments.Common.GetActiveAppointmentsByDoctor;
+using SweetMedical.Application.Appointments.Queries.GetActiveAppointmentsByDoctor;
 using SweetMedical.Application.Common.Interfaces.Persistence;
-using SweetMedical.Domain.Appointment;
+using SweetMedical.Domain.AggregateModels.AppointmentAggregate;
 
 namespace SweetMedical.Tests.SweetMedical.Application.Appointments.Commands.CreateAppointment;
 
 public class CreateAppointmentCommandHandlerTests
 {
     private readonly Mock<IAppointmentRepository> _repositoryMock = new();
+    private readonly Mock<ISender> _senderMock = new();
     private readonly CreateAppointmentCommandHandler _handler;
 
     public CreateAppointmentCommandHandlerTests()
     {
-        _handler = new CreateAppointmentCommandHandler(_repositoryMock.Object);
+        _handler = new CreateAppointmentCommandHandler(_repositoryMock.Object, _senderMock.Object);
     }
 
     [Fact]
@@ -35,13 +39,11 @@ public class CreateAppointmentCommandHandlerTests
         var scheduledAt = DateTime.UtcNow.AddDays(1);
         var existing = new Appointment(Guid.NewGuid(), doctorId, "Existing Patient", scheduledAt);
 
-        _repositoryMock
-            .Setup(r => r.GetActiveAppointmentsByDoctor(doctorId))
-            .ReturnsAsync([existing]);
+        _senderMock
+            .Setup(s => s.Send(It.Is<GetActiveAppointmentsByDoctorQuery>(q => q.DoctorId == doctorId), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GetActiveAppointmentsByDoctorResult([existing]));
 
-        var command = new CreateAppointmentCommand(doctorId, "John Doe", scheduledAt);
-
-        var result = await _handler.Handle(command, CancellationToken.None);
+        var result = await _handler.Handle(new CreateAppointmentCommand(doctorId, "John Doe", scheduledAt), CancellationToken.None);
 
         Assert.True(result.IsError);
         Assert.Equal(ErrorType.Conflict, result.FirstError.Type);
@@ -53,13 +55,12 @@ public class CreateAppointmentCommandHandlerTests
     {
         var doctorId = Guid.NewGuid();
 
-        _repositoryMock
-            .Setup(r => r.GetActiveAppointmentsByDoctor(doctorId))
-            .ReturnsAsync([]);
+        _senderMock
+            .Setup(s => s.Send(It.Is<GetActiveAppointmentsByDoctorQuery>(q => q.DoctorId == doctorId), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new GetActiveAppointmentsByDoctorResult([]));
 
-        var command = new CreateAppointmentCommand(doctorId, "John Doe", DateTime.UtcNow.AddDays(1));
-
-        var result = await _handler.Handle(command, CancellationToken.None);
+        var result = await _handler.Handle(
+            new CreateAppointmentCommand(doctorId, "John Doe", DateTime.UtcNow.AddDays(1)), CancellationToken.None);
 
         Assert.False(result.IsError);
         Assert.Equal("John Doe", result.Value.Appointment.PatientName);

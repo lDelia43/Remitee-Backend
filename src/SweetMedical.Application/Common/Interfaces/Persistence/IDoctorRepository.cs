@@ -1,8 +1,8 @@
-﻿using SweetMedical.Domain.Doctor;
+﻿using SweetMedical.Domain.AggregateModels.AggregateDoctor;
 
 namespace SweetMedical.Application.Common.Interfaces.Persistence;
 
 public interface IDoctorRepository
 {
-    Task<List<Doctor>> GetDoctors();
+    Task Add(Doctor doctor);
 }

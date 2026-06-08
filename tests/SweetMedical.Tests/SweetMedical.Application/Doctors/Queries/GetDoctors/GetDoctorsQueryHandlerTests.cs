@@ -1,26 +1,24 @@
 using Moq;
 using SweetMedical.Application.Common.Interfaces.Persistence;
 using SweetMedical.Application.Doctors.Queries.GetDoctors;
-using SweetMedical.Domain.Doctor;
+using SweetMedical.Domain.AggregateModels.AggregateDoctor;
 
 namespace SweetMedical.Tests.SweetMedical.Application.Doctors.Queries.GetDoctors;
 
 public class GetDoctorsQueryHandlerTests
 {
-    private readonly Mock<IDoctorRepository> _repositoryMock = new();
+    private readonly Mock<IDoctorQueries> _queriesMock = new();
     private readonly GetDoctorsQueryHandler _handler;
 
     public GetDoctorsQueryHandlerTests()
     {
-        _handler = new GetDoctorsQueryHandler(_repositoryMock.Object);
+        _handler = new GetDoctorsQueryHandler(_queriesMock.Object);
     }
 
     [Fact]
     public async Task Handle_Should_ReturnEmptyList_WhenNoDoctorsExist()
     {
-        _repositoryMock
-            .Setup(r => r.GetDoctors())
-            .ReturnsAsync([]);
+        _queriesMock.Setup(q => q.GetAll()).ReturnsAsync([]);
 
         var result = await _handler.Handle(new GetDoctorsQuery(), CancellationToken.None);
 
@@ -31,12 +29,10 @@ public class GetDoctorsQueryHandlerTests
     [Fact]
     public async Task Handle_Should_ReturnAllDoctors_WhenDoctorsExist()
     {
-        _repositoryMock
-            .Setup(r => r.GetDoctors())
-            .ReturnsAsync([
-                new Doctor(Guid.NewGuid(), "Dr. House", "Diagnostics"),
-                new Doctor(Guid.NewGuid(), "Dr. Strange", "Neurosurgery")
-            ]);
+        _queriesMock.Setup(q => q.GetAll()).ReturnsAsync([
+            new Doctor(Guid.NewGuid(), "Dr. House", "Diagnostics"),
+            new Doctor(Guid.NewGuid(), "Dr. Strange", "Neurosurgery")
+        ]);
 
         var result = await _handler.Handle(new GetDoctorsQuery(), CancellationToken.None);
 
@@ -48,9 +44,7 @@ public class GetDoctorsQueryHandlerTests
     public async Task Handle_Should_ReturnDoctorsWithCorrectData()
     {
         var doctorId = Guid.NewGuid();
-
-        _repositoryMock
-            .Setup(r => r.GetDoctors())
+        _queriesMock.Setup(q => q.GetAll())
             .ReturnsAsync([new Doctor(doctorId, "Dr. House", "Diagnostics")]);
 
         var result = await _handler.Handle(new GetDoctorsQuery(), CancellationToken.None);

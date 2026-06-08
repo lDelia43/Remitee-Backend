@@ -1,6 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using SweetMedical.Application.Common.Interfaces.Persistence;
-using SweetMedical.Domain.Doctor;
+using SweetMedical.Domain.AggregateModels.AggregateDoctor;
 
 namespace SweetMedical.Infrastructure.Persistence.Repositories;
 
@@ -13,8 +12,9 @@ public class DoctorRepository : IDoctorRepository
         _context = context;
     }
 
-    public async Task<List<Doctor>> GetDoctors()
+    public async Task Add(Doctor doctor)
     {
-        return await _context.Doctors.ToListAsync();
+        await _context.Doctors.AddAsync(doctor);
+        await _context.SaveChangesAsync();
     }
 }

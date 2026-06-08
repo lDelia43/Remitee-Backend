@@ -1,6 +1,6 @@
 using SweetMedical.Domain.Models;
 
-namespace SweetMedical.Domain.Entities;
+namespace SweetMedical.Domain.AggregateModels;
 
 public abstract class Person<TId> : AggregateRoot<TId> where TId : notnull
 {

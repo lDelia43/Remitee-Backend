@@ -2,7 +2,7 @@ using AutoMapper;
 using SweetMedical.Application.Appointments.Common.GetAppointments;
 using SweetMedical.Contracts.Appointments;
 using SweetMedical.Contracts.Appointments.CreateAppointment;
-using SweetMedical.Domain.Appointment;
+using SweetMedical.Domain.AggregateModels.AppointmentAggregate;
 
 namespace SweetMedical.Api.Mappings;
 

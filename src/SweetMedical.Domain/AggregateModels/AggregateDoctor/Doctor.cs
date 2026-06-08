@@ -1,6 +1,4 @@
-using SweetMedical.Domain.Entities;
-
-namespace SweetMedical.Domain.Doctor;
+namespace SweetMedical.Domain.AggregateModels.AggregateDoctor;
 
 public sealed class Doctor : Person<Guid>
 {
